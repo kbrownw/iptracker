@@ -13,6 +13,9 @@ export const SearchBox = () => {
     if (isValidIp) {
       getIPData(ipAddress);
       setError("");
+    } else if (ipAddress === "") {
+      getIPData(ipAddress);
+      setError("");
     } else {
       setError("Please enter a valid IP address. E.g. 76.55.192.26");
     }
@@ -47,7 +50,7 @@ export const SearchBox = () => {
     >
       <div className="flex">
         <input
-          className="p-4 rounded-s-2xl text-[28px] w-[85%]"
+          className="p-3 rounded-s-2xl text-[18px]  w-[85%] md:p-4 md:text-[22px] lg:text-[28px]"
           type="text"
           placeholder="Enter IP Address"
           onChange={(e) => setIPAddress(e.target.value)}

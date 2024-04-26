@@ -7,7 +7,7 @@ function App() {
   const { getIPData, isLoading, ipData } = useAppContext();
 
   useEffect(() => {
-    getIPData("8.8.8.8");
+    getIPData();
   }, []);
 
   useEffect(() => {
@@ -19,8 +19,8 @@ function App() {
 
   return (
     <main className="flex flex-col min-h-[100vh] relative font-Rubik">
-      <Foreground />
       <Background />
+      <Foreground />
     </main>
   );
 }
