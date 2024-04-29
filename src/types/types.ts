@@ -19,11 +19,16 @@ export interface AppContextTypes {
   error: any;
   ipData: IPData;
   isUserIP: boolean;
+  setIsUserIP: React.Dispatch<React.SetStateAction<boolean>>;
   getIPData: (value?: string) => void;
   dnsIsLoading: boolean;
   dnsResponse: DNSData | undefined;
   dnsError: any;
   getIPFromDomain: (value: string) => void;
+  userIPAddress: string;
+  userIPIsLoading: boolean;
+  userIPError: any;
+  getUserIP: () => Promise<void>;
 }
 
 export interface DNSData {

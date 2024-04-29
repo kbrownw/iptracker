@@ -5,20 +5,13 @@ export const useIPLookupAPI = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<any>("");
   const [ipData, setIPData] = useState<IPData>(null!);
-  const [isUserIP, setIsUserIP] = useState(false);
 
   const getIPData = async (ipAddress?: string) => {
-    const url = ipAddress
+    let url = ipAddress
       ? `https://freeipapi.com/api/json/${ipAddress}`
       : `https://freeipapi.com/api/json/`;
     let response;
     let data: IPData;
-
-    if (!ipAddress) {
-      setIsUserIP(true);
-    } else {
-      setIsUserIP(false);
-    }
 
     setIsLoading(true);
     setError("");
@@ -45,5 +38,5 @@ export const useIPLookupAPI = () => {
     }
   };
 
-  return { isLoading, error, ipData, isUserIP, getIPData };
+  return { isLoading, error, ipData, getIPData };
 };

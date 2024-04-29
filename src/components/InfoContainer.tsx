@@ -3,6 +3,7 @@ import { InfoItem } from "./InfoItem";
 
 export const InfoContainer = () => {
   const { ipData, isLoading, isUserIP } = useAppContext();
+
   return (
     <div
       className="flex flex-col min-w-[80vw] max-w-[80vw] mx-auto py-5 gap-5 bg-white rounded-2xl divide-x-[1px] divide-gray-300 justify-around

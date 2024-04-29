@@ -4,11 +4,19 @@ import { Foreground } from "./components/Foreground";
 import { useAppContext } from "./context/AppContext";
 
 function App() {
-  const { getIPData } = useAppContext();
+  const { getIPData, getUserIP, userIPAddress, setIsUserIP, isUserIP } =
+    useAppContext();
 
   useEffect(() => {
-    getIPData();
+    setIsUserIP(true);
+    getUserIP();
   }, []);
+
+  useEffect(() => {
+    if (userIPAddress && isUserIP) {
+      getIPData(userIPAddress);
+    }
+  }, [isUserIP]);
 
   return (
     <main className="flex flex-col min-h-[100vh] relative font-Rubik">

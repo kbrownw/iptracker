@@ -5,21 +5,31 @@ import isValidDomain from "is-valid-domain";
 
 export const SearchBox = () => {
   const [ipOrDomain, setIpOrDomain] = useState<string>("");
-  const { getIPData, getIPFromDomain, dnsResponse, dnsError } = useAppContext();
+  const {
+    getIPData,
+    getIPFromDomain,
+    dnsResponse,
+    dnsError,
+    getUserIP,
+    setIsUserIP,
+  } = useAppContext();
   const [error, setError] = useState<string>("");
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     let isValidIp = ipIsValid();
     if (isValidIp) {
+      setIsUserIP(false);
       getIPData(ipOrDomain);
       setError("");
       return;
     } else if (ipOrDomain === "") {
-      getIPData(ipOrDomain);
+      setIsUserIP(true);
+      getUserIP();
       setError("");
       return;
     } else if (isValidDomain(ipOrDomain, { subdomain: true })) {
+      setIsUserIP(false);
       getIPFromDomain(ipOrDomain);
       if (dnsError) {
         setError(dnsError);
