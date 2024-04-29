@@ -1,6 +1,7 @@
 import { createContext, useContext } from "react";
 import { AppContextTypes } from "../types/types";
 import { useIPLookupAPI } from "../hooks/useIPLookupAPI";
+import { useDNSLookup } from "../hooks/useDNSLookup";
 
 interface Props {
   children: React.ReactNode;
@@ -9,10 +10,28 @@ interface Props {
 export const AppContext = createContext<AppContextTypes | undefined>(undefined);
 
 export const AppContextWrapper = ({ children }: Props) => {
-  const { ipData, isLoading, error, getIPData } = useIPLookupAPI();
+  const { ipData, isLoading, error, isUserIP, getIPData } = useIPLookupAPI();
+  const {
+    dnsResponse,
+    isLoading: dnsIsLoading,
+    error: dnsError,
+    getIPFromDomain,
+  } = useDNSLookup();
 
   return (
-    <AppContext.Provider value={{ ipData, isLoading, error, getIPData }}>
+    <AppContext.Provider
+      value={{
+        ipData,
+        isLoading,
+        error,
+        isUserIP,
+        getIPData,
+        dnsResponse,
+        dnsIsLoading,
+        dnsError,
+        getIPFromDomain,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );

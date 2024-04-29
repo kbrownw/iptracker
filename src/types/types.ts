@@ -18,5 +18,33 @@ export interface AppContextTypes {
   isLoading: boolean;
   error: any;
   ipData: IPData;
+  isUserIP: boolean;
   getIPData: (value?: string) => void;
+  dnsIsLoading: boolean;
+  dnsResponse: DNSData | undefined;
+  dnsError: any;
+  getIPFromDomain: (value: string) => void;
+}
+
+export interface DNSData {
+  Status: number;
+  TC: boolean;
+  RD: boolean;
+  RA: boolean;
+  AD: boolean;
+  CD: boolean;
+  Question: [
+    {
+      name: string;
+      type: number;
+    }
+  ];
+  Answer: [
+    {
+      name: string;
+      type: number;
+      TTL: number;
+      data: string;
+    }
+  ];
 }

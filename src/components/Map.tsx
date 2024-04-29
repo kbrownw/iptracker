@@ -31,10 +31,6 @@ export const Map = () => {
     }
   }, [ipData]);
 
-  useEffect(() => {
-    console.log(position);
-  }, [position]);
-
   if (isLoading || !ipData || !position) {
     return (
       <div className="flex flex-grow mx-auto max-w-[90vw]">

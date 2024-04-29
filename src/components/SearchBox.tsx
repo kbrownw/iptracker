@@ -1,29 +1,42 @@
-import { FormEventHandler, useState } from "react";
+import { FormEventHandler, useEffect, useState } from "react";
 import Arrow from "../assets/images/icon-arrow.svg";
 import { useAppContext } from "../context/AppContext";
+import isValidDomain from "is-valid-domain";
 
 export const SearchBox = () => {
-  const [ipAddress, setIPAddress] = useState<string>("");
-  const { getIPData } = useAppContext();
+  const [ipOrDomain, setIpOrDomain] = useState<string>("");
+  const { getIPData, getIPFromDomain, dnsResponse, dnsError } = useAppContext();
   const [error, setError] = useState<string>("");
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     let isValidIp = ipIsValid();
     if (isValidIp) {
-      getIPData(ipAddress);
+      getIPData(ipOrDomain);
       setError("");
-    } else if (ipAddress === "") {
-      getIPData(ipAddress);
+      return;
+    } else if (ipOrDomain === "") {
+      getIPData(ipOrDomain);
       setError("");
-    } else {
-      setError("Please enter a valid IP address. E.g. 76.55.192.26");
+      return;
+    } else if (isValidDomain(ipOrDomain, { subdomain: true })) {
+      getIPFromDomain(ipOrDomain);
+      if (dnsError) {
+        setError(dnsError);
+      } else {
+        setError("");
+      }
+
+      return;
     }
+
+    setError(
+      "Please enter a valid IP address or domain name. E.g. 76.55.192.26 or google.com"
+    );
   };
 
   const ipIsValid = () => {
-    const ipArray = ipAddress.split(".");
-    console.log(ipArray);
+    const ipArray = ipOrDomain.split(".");
     if (ipArray.length === 4) {
       for (let i = 0; i < 4; i++) {
         let arrItemAsNumber = Number(ipArray[i]);
@@ -43,18 +56,31 @@ export const SearchBox = () => {
     }
   };
 
+  useEffect(() => {
+    if (dnsResponse) {
+      if (dnsResponse.Status === 0 && dnsResponse.Answer) {
+        if (dnsResponse.Answer[0].type === 1) {
+          getIPData(dnsResponse.Answer[0].data);
+          setError("");
+          return;
+        }
+      }
+      setError(`No valid information for domain ${ipOrDomain}.`);
+    }
+  }, [dnsResponse]);
+
   return (
     <form
-      className="px-4 mx-auto min-w-[80vw] md:min-w-[40vw]"
+      className="px-4 mx-auto min-w-[80vw] md:min-w-[45vw]"
       onSubmit={handleSubmit}
     >
       <div className="flex">
         <input
-          className="p-3 rounded-s-2xl text-[18px]  w-[85%] md:p-4 md:text-[22px] lg:text-[28px]"
+          className="p-3 rounded-s-2xl text-[18px] w-[85%] md:p-4 md:text-[20px] lg:text-[24px] focus:outline-none"
           type="text"
-          placeholder="Enter IP Address"
-          onChange={(e) => setIPAddress(e.target.value)}
-          value={ipAddress}
+          placeholder="Search for any IP address or domain"
+          onChange={(e) => setIpOrDomain(e.target.value)}
+          value={ipOrDomain}
         />
         <div className="relative bg-black rounded-e-2xl overflow-hidden flex-grow hover:bg-very-dark-gray">
           <button
@@ -70,7 +96,9 @@ export const SearchBox = () => {
       </div>
 
       {!!error ? (
-        <p className="py-2 text-md text-red-500 font-semibold">{error}</p>
+        <p className="py-2 max-w-[400px] mx-auto text-md text-black font-semibold">
+          {error}
+        </p>
       ) : (
         <div></div>
       )}
