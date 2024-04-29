@@ -15,7 +15,7 @@ export const AppContextWrapper = ({ children }: Props) => {
   const { ipData, isLoading, error, getIPData } = useIPLookupAPI();
   const {
     dnsResponse,
-    isLoading: dnsIsLoading,
+    dnsIsLoading,
     error: dnsError,
     getIPFromDomain,
   } = useDNSLookup();

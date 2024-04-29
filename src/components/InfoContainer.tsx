@@ -1,8 +1,19 @@
 import { useAppContext } from "../context/AppContext";
+import { IPData } from "../types/types";
 import { InfoItem } from "./InfoItem";
+import { useEffect, useState } from "react";
 
 export const InfoContainer = () => {
-  const { ipData, isLoading, isUserIP } = useAppContext();
+  const { ipData, isLoading, isUserIP, dnsIsLoading } = useAppContext();
+  const [ipV4Data, setIPV4Data] = useState<IPData>(null!);
+
+  useEffect(() => {
+    if (!!ipData) {
+      if (ipData.ipVersion === 4) {
+        setIPV4Data(ipData);
+      }
+    }
+  }, [ipData]);
 
   return (
     <div
@@ -11,24 +22,24 @@ export const InfoContainer = () => {
     >
       <InfoItem
         title={isUserIP ? "IP ADDRESS (YOURS)" : "IP ADDRESS"}
-        data={ipData?.ipAddress}
-        isLoading={isLoading}
+        data={ipV4Data?.ipAddress}
+        isLoading={isLoading || dnsIsLoading}
       />
       <InfoItem
         title="LOCATION"
-        data={`${ipData?.cityName}, ${ipData?.regionName}`}
-        data2={ipData?.zipCode}
-        isLoading={isLoading}
+        data={`${ipV4Data?.cityName}, ${ipV4Data?.regionName}`}
+        data2={ipV4Data?.zipCode}
+        isLoading={isLoading || dnsIsLoading}
       />
       <InfoItem
         title="TIMEZONE"
-        data={`UTC ${ipData?.timeZone}`}
-        isLoading={isLoading}
+        data={`UTC ${ipV4Data?.timeZone}`}
+        isLoading={isLoading || dnsIsLoading}
       />
       <InfoItem
         title="COUNTRY"
-        data={ipData?.countryName}
-        isLoading={isLoading}
+        data={ipV4Data?.countryName}
+        isLoading={isLoading || dnsIsLoading}
       />
     </div>
   );

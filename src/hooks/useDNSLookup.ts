@@ -6,18 +6,22 @@ export const useDNSLookup = () => {
   const [dnsResponse, setDNSResponse] = useState<DNSData | undefined>(
     undefined
   );
-  const [isLoading, setIsLoading] = useState(false);
+  const [dnsIsLoading, setDnsIsLoading] = useState(false);
 
   const getIPFromDomain = async (name: string) => {
-    const url = `https://dns.google.com/resolve?name=${name}`;
+    const url = `https://cloudflare-dns.com/dns-query?name=${name}`;
     let response;
     let data: DNSData;
 
     setError(false);
-    setIsLoading(true);
+    setDnsIsLoading(true);
 
     try {
-      response = await fetch(url);
+      response = await fetch(url, {
+        headers: {
+          Accept: "application/dns-json",
+        },
+      });
     } catch (e) {
       console.log("DNS Fetch Error: ", e);
       setError(true);
@@ -31,10 +35,10 @@ export const useDNSLookup = () => {
         console.log("DNS JSON Error: ", e);
         setError(true);
       } finally {
-        setIsLoading(false);
+        setDnsIsLoading(false);
       }
     }
   };
 
-  return { isLoading, dnsResponse, error, getIPFromDomain };
+  return { dnsIsLoading, dnsResponse, error, getIPFromDomain };
 };

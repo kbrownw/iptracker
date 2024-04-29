@@ -16,7 +16,7 @@ function App() {
     if (userIPAddress && isUserIP) {
       getIPData(userIPAddress);
     }
-  }, [isUserIP]);
+  }, [isUserIP, userIPAddress]);
 
   return (
     <main className="flex flex-col min-h-[100vh] relative font-Rubik">

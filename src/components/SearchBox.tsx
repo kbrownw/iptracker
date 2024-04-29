@@ -17,9 +17,9 @@ export const SearchBox = () => {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+    setIsUserIP(false);
     let isValidIp = ipIsValid();
     if (isValidIp) {
-      setIsUserIP(false);
       getIPData(ipOrDomain);
       setError("");
       return;
@@ -29,7 +29,6 @@ export const SearchBox = () => {
       setError("");
       return;
     } else if (isValidDomain(ipOrDomain, { subdomain: true })) {
-      setIsUserIP(false);
       getIPFromDomain(ipOrDomain);
       if (dnsError) {
         setError(dnsError);
