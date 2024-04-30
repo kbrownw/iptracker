@@ -76,6 +76,7 @@ export const SearchBox = () => {
         if (dnsResponse.Answer[0].type === 1) {
           getIPData(dnsResponse.Answer[0].data);
           setError("");
+          setNoData(false);
           return;
         }
       }
