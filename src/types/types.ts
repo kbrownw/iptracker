@@ -19,6 +19,8 @@ export interface AppContextTypes {
   error: any;
   ipData: IPData;
   isUserIP: boolean;
+  noData: boolean;
+  setNoData: React.Dispatch<React.SetStateAction<boolean>>;
   setIsUserIP: React.Dispatch<React.SetStateAction<boolean>>;
   getIPData: (value?: string) => void;
   dnsIsLoading: boolean;

@@ -8,7 +8,7 @@ import L from "leaflet";
 import useMediaQuery from "../hooks/useMediaQuery";
 
 export const Map = () => {
-  const { isLoading, ipData } = useAppContext();
+  const { isLoading, ipData, noData, dnsIsLoading } = useAppContext();
   const isMediumScreen = useMediaQuery("(min-width: 770px)");
   const [position, setPosition] = useState<LatLngExpression | undefined>(
     undefined
@@ -31,7 +31,7 @@ export const Map = () => {
     }
   }, [ipData]);
 
-  if (isLoading || !ipData || !position) {
+  if (isLoading || !ipData || !position || dnsIsLoading) {
     return (
       <div className="flex flex-grow mx-auto max-w-[90vw]">
         <p className="text-white text-3xl self-center">Loading map</p>
@@ -39,11 +39,11 @@ export const Map = () => {
     );
   }
 
-  if (ipData?.cityName === "-") {
+  if (ipData?.cityName === "-" || noData) {
     return (
       <div className="flex flex-grow mx-auto max-w-[90vw]">
         <p className="text-white text-3xl self-center">
-          No location information for ip address {ipData?.ipAddress}
+          No location information found.
         </p>
       </div>
     );

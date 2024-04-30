@@ -4,7 +4,7 @@ import { InfoItem } from "./InfoItem";
 import { useEffect, useState } from "react";
 
 export const InfoContainer = () => {
-  const { ipData, isLoading, isUserIP, dnsIsLoading } = useAppContext();
+  const { ipData, isLoading, isUserIP, dnsIsLoading, noData } = useAppContext();
   const [ipV4Data, setIPV4Data] = useState<IPData>(null!);
 
   useEffect(() => {
@@ -22,23 +22,23 @@ export const InfoContainer = () => {
     >
       <InfoItem
         title={isUserIP ? "IP ADDRESS (YOURS)" : "IP ADDRESS"}
-        data={ipV4Data?.ipAddress}
+        data={noData ? `-` : ipV4Data?.ipAddress}
         isLoading={isLoading || dnsIsLoading}
       />
       <InfoItem
         title="LOCATION"
-        data={`${ipV4Data?.cityName}, ${ipV4Data?.regionName}`}
-        data2={ipV4Data?.zipCode}
+        data={noData ? `-` : `${ipV4Data?.cityName}, ${ipV4Data?.regionName}`}
+        data2={noData ? `-` : ipV4Data?.zipCode}
         isLoading={isLoading || dnsIsLoading}
       />
       <InfoItem
         title="TIMEZONE"
-        data={`UTC ${ipV4Data?.timeZone}`}
+        data={noData ? `-` : `UTC ${ipV4Data?.timeZone}`}
         isLoading={isLoading || dnsIsLoading}
       />
       <InfoItem
         title="COUNTRY"
-        data={ipV4Data?.countryName}
+        data={noData ? `-` : ipV4Data?.countryName}
         isLoading={isLoading || dnsIsLoading}
       />
     </div>

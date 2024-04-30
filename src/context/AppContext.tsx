@@ -12,6 +12,7 @@ export const AppContext = createContext<AppContextTypes | undefined>(undefined);
 
 export const AppContextWrapper = ({ children }: Props) => {
   const [isUserIP, setIsUserIP] = useState(false);
+  const [noData, setNoData] = useState(false);
   const { ipData, isLoading, error, getIPData } = useIPLookupAPI();
   const {
     dnsResponse,
@@ -29,6 +30,8 @@ export const AppContextWrapper = ({ children }: Props) => {
   return (
     <AppContext.Provider
       value={{
+        noData,
+        setNoData,
         isUserIP,
         setIsUserIP,
         ipData,

@@ -12,6 +12,7 @@ export const SearchBox = () => {
     dnsError,
     getUserIP,
     setIsUserIP,
+    setNoData,
   } = useAppContext();
   const [error, setError] = useState<string>("");
 
@@ -22,16 +23,19 @@ export const SearchBox = () => {
     if (isValidIp) {
       getIPData(ipOrDomain);
       setError("");
+      setNoData(false);
       return;
     } else if (ipOrDomain === "") {
       setIsUserIP(true);
       getUserIP();
       setError("");
+      setNoData(false);
       return;
     } else if (isValidDomain(ipOrDomain, { subdomain: true })) {
       getIPFromDomain(ipOrDomain);
       if (dnsError) {
         setError(dnsError);
+        setNoData(true);
       } else {
         setError("");
       }
@@ -39,6 +43,7 @@ export const SearchBox = () => {
       return;
     }
 
+    setNoData(true);
     setError(
       "Please enter a valid IP address or domain name. E.g. 76.55.192.26 or google.com"
     );
@@ -75,6 +80,7 @@ export const SearchBox = () => {
         }
       }
       setError(`No valid information for domain ${ipOrDomain}.`);
+      setNoData(true);
     }
   }, [dnsResponse]);
 
